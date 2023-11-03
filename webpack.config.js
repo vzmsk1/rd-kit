@@ -1,46 +1,46 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
-const ImageminWebpWebpackPlugin = require("imagemin-webp-webpack-plugin");
-const fs = require("fs");
-const path = require("path");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+const ImageminWebpWebpackPlugin = require('imagemin-webp-webpack-plugin');
+const fs = require('fs');
+const path = require('path');
 
-const mode = process.env.NODE_ENV || "development";
-const devMode = mode === "development";
-const target = devMode ? "web" : "browserslist";
-const devtool = devMode ? "source-map" : undefined;
+const mode = process.env.NODE_ENV || 'development';
+const devMode = mode === 'development';
+const target = devMode ? 'web' : 'browserslist';
+const devtool = devMode ? 'source-map' : undefined;
 
 const entryPoints = {
-  index: path.resolve(__dirname, "src", "index.js"),
+  index: path.resolve(__dirname, 'src', 'index.js'),
   // Добавьте другие страницы здесь
 };
 
 // Создаем экземпляры HtmlWebpackPlugin для каждой страницы
-const htmlPlugins = Object.keys(entryPoints).map((entryName) => {
+const htmlPlugins = Object.keys(entryPoints).map(entryName => {
   return new HtmlWebpackPlugin({
-    template: path.resolve(__dirname, "src", `${entryName}.html`),
+    template: path.resolve(__dirname, 'src', `${entryName}.html`),
     filename: `${entryName}.html`, // Имя файла для каждой страницы
     cache: false,
-    chunks: "all", // Укажите, какой бандл связать с каждой страницей
+    chunks: 'all', // Укажите, какой бандл связать с каждой страницей
   });
 });
 
-function processNestedHtml(content, loaderContext, resourcePath = "") {
+function processNestedHtml(content, loaderContext, resourcePath = '') {
   let fileDir =
-    resourcePath === ""
+    resourcePath === ''
       ? path.dirname(loaderContext.resourcePath)
       : path.dirname(resourcePath);
   const INCLUDE_PATTERN =
     /\<include src=\"(\.\/)?(.+)\"\/?\>(?:\<\/include\>)?/gi;
 
   function replaceHtml(match, pathRule, src) {
-    if (pathRule === "./") {
+    if (pathRule === './') {
       fileDir = loaderContext.context;
     }
     const filePath = path.resolve(fileDir, src);
     loaderContext.dependency(filePath);
-    const html = fs.readFileSync(filePath, "utf8");
+    const html = fs.readFileSync(filePath, 'utf8');
     console.log(html);
 
     return processNestedHtml(html, loaderContext, filePath);
@@ -63,10 +63,10 @@ module.exports = {
   target,
   devtool,
   devServer: {
-    static: path.resolve(__dirname, "src"),
+    static: path.resolve(__dirname, 'src'),
     port: 3000,
     open: true,
-    watchFiles: path.join(__dirname, "src"),
+    watchFiles: path.join(__dirname, 'src'),
     //пересборка проекта при подкачке бибилотек
     // watchOptions: {
     //   ignored: /node_modules/,
@@ -74,17 +74,17 @@ module.exports = {
     // watchFiles: ["src/*.html"],
   },
   entry: {
-    main: path.resolve(__dirname, "src", "index.js"),
+    main: path.resolve(__dirname, 'src', 'index.js'),
   },
   output: {
     //куда выводит билд
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, 'dist'),
     //очистка билда перед сборкой нового
     clean: true,
     //название js файла в билде
     // [name] - стандартный по вебпаку (main), [contenthash] - добавляептся хэш к названию
-    filename: "[name][contenthash].js",
-    assetModuleFilename: "assets/images",
+    filename: '[name][contenthash].js',
+    assetModuleFilename: 'assets/images',
   },
 
   plugins: [
@@ -96,7 +96,7 @@ module.exports = {
     // }),
     ...htmlPlugins,
     new MiniCssExtractPlugin({
-      filename: "[name].css",
+      filename: '[name].css',
     }),
   ],
 
@@ -106,7 +106,7 @@ module.exports = {
         test: /\.html$/i,
         use: [
           {
-            loader: "html-loader",
+            loader: 'html-loader',
             options: {
               // sources: false,
               minimize: false,
@@ -123,7 +123,7 @@ module.exports = {
           ? []
           : [
               {
-                loader: "image-webpack-loader",
+                loader: 'image-webpack-loader',
                 options: {
                   mozjpeg: {
                     progressive: true,
@@ -144,27 +144,27 @@ module.exports = {
                 },
               },
             ],
-        type: "asset/resource",
+        type: 'asset/resource',
         generator: {
-          filename: "assets/images/[name][ext]",
+          filename: 'assets/images/[name][ext]',
         },
       },
       // css,scss
       {
         test: /\.(c|sa|sc)ss$/i,
         use: [
-          devMode ? "style-loader" : MiniCssExtractPlugin.loader,
-          "css-loader",
+          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
           {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
               postcssOptions: {
-                plugins: [require("postcss-preset-env")],
+                plugins: [require('postcss-preset-env')],
               },
             },
           },
           {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: {
               sourceMap: true,
             },
@@ -174,9 +174,9 @@ module.exports = {
       // шрифты
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: "asset/resource",
+        type: 'asset/resource',
         generator: {
-          filename: "assets/fonts/[name][ext]",
+          filename: 'assets/fonts/[name][ext]',
         },
       },
       //js
@@ -184,9 +184,9 @@ module.exports = {
         test: /\.(?:js|mjs|cjs)$/i,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
-            presets: [["@babel/preset-env", { targets: "defaults" }]],
+            presets: [['@babel/preset-env', { targets: 'defaults' }]],
           },
         },
       },
@@ -195,9 +195,9 @@ module.exports = {
         test: /\.(mov|mp4)$/,
         use: [
           {
-            loader: "file-loader",
+            loader: 'file-loader',
             options: {
-              name: "[name].[ext]",
+              name: '[name].[ext]',
             },
           },
         ],
@@ -206,25 +206,25 @@ module.exports = {
   },
   optimization: {
     minimizer: [
-      "...", // Здесь могут быть другие плагины для минимизации (например, TerserPlugin для минификации JavaScript)
+      '...', // Здесь могут быть другие плагины для минимизации (например, TerserPlugin для минификации JavaScript)
       new ImageMinimizerPlugin({
         minimizer: {
           implementation: ImageMinimizerPlugin.imageminMinify, // Выбор реализации минимизации изображений
           options: {
             plugins: [
-              "imagemin-gifsicle", // Плагин для оптимизации GIF изображений
-              "imagemin-mozjpeg", // Плагин для оптимизации JPEG изображений
-              "imagemin-pngquant", // Плагин для оптимизации PNG изображений
-              "imagemin-svgo", // Плагин для оптимизации SVG изображений
+              'imagemin-gifsicle', // Плагин для оптимизации GIF изображений
+              'imagemin-mozjpeg', // Плагин для оптимизации JPEG изображений
+              'imagemin-pngquant', // Плагин для оптимизации PNG изображений
+              'imagemin-svgo', // Плагин для оптимизации SVG изображений
             ],
           },
         },
         generator: [
           {
-            preset: "webp",
+            preset: 'webp',
             implementation: ImageMinimizerPlugin.imageminGenerate,
             options: {
-              plugins: ["imagemin-webp"],
+              plugins: ['imagemin-webp'],
             },
           },
         ],
