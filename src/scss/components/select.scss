@@ -223,15 +223,17 @@
     }
   }
   &._select-error {
-    .select__hint {
-      color: #f3566a;
-    }
-    .select__title {
-      border: 2px solid #f3566a;
-      background-color: #fee7ea;
-    }
-    ._select-label::before {
-      color: #f3566a;
+    &:not(&._select-filled, &._select-opened) {
+      .select__hint {
+        color: #f3566a;
+      }
+      .select__title {
+        border: 2px solid #f3566a;
+        background-color: #fee7ea;
+      }
+      ._select-label::before {
+        color: #f3566a;
+      }
     }
   }
   &._select-filled {

@@ -237,11 +237,6 @@ class Select {
         if (target.closest(this.getClass(this.classes.sel))) {
           if (type === 'focusin') {
             select.classList.add(this.classes.focused);
-            if (relativeSel.hasAttribute('data-validate')) {
-              if (select.classList.contains(this.classes.error)) {
-                this.removeErr(relativeSel, select);
-              }
-            }
           } else {
             select.classList.remove(this.classes.focused);
             if (relativeSel.hasAttribute('data-validate')) {
@@ -273,6 +268,13 @@ class Select {
     if (!selOptions.classList.contains('_slide')) {
       select.classList.toggle(this.classes.opened);
       _slideToggle(selOptions, relativeSel.dataset.speed);
+      if (
+        select.classList.contains(this.classes.opened) &&
+        relativeSel.hasAttribute('data-validate') &&
+        select.classList.contains(this.classes.error)
+      ) {
+        this.removeErr(relativeSel, select);
+      }
     }
   }
   // close single select group
