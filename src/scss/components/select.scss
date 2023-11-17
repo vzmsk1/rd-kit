@@ -31,12 +31,13 @@
   // .select__value
 
   &__value {
+    padding: 1.6rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.6rem;
-    height: 5.8rem;
     gap: 1rem;
+    height: 5.8rem;
+    width: 100%;
 
     > * {
       flex: 1 1 auto;
@@ -75,6 +76,7 @@
   // .select__content
 
   &__content {
+    // hide / show selected value
     display: none;
   }
 
@@ -99,12 +101,12 @@
     z-index: 2;
     top: calc(100% + 0.8rem);
     left: 0;
+    padding: 1.2rem 0;
     min-width: 100%;
     box-shadow: 0 0.8rem 2.5rem 0 rgba(99, 119, 156, 0.2);
     border-top: 0;
     border-top: 0;
     border-radius: 0.4rem;
-    padding: 1.2rem 0;
     background-color: #ffffff;
     color: #1f232b;
     .select_has-subtitle & {

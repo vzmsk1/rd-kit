@@ -461,7 +461,13 @@ class Select {
         this.getData(relativeSel).elements[0].dataset.optClass
           ? ` ${this.getData(relativeSel).elements[0].dataset.optClass}`
           : '';
-      return `<button type="button" class="${this.classes.title}"><span${attr} class="${this.classes.val}${attrClass}"><span class="${this.classes.content}${customClass}">${titleVal}</span></span></button>`;
+      return `<button type="button" class="${this.classes.title}"><span ${
+        attr ? attr : ''
+      } class="${this.classes.val} ${
+        attrClass ? attrClass : ''
+      }"><span class="${this.classes.content} ${
+        customClass ? customClass : ''
+      }">${titleVal}</span></span></button>`;
     }
   }
   // get options
