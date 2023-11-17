@@ -318,6 +318,10 @@ class Select {
           .setAttribute('selected', 'selected');
       });
     } else {
+      select
+        .querySelectorAll('.select__option')
+        .forEach(opt => opt.classList.remove(this.classes.selected));
+      option.classList.add(this.classes.selected);
       if (!relativeSel.hasAttribute('data-show-selection')) {
         if (
           select.querySelector(`${this.getClass(this.classes.option)}[hidden]`)
