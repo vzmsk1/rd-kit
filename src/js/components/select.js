@@ -2,6 +2,7 @@ import { _slideUp, _slideDown, _slideToggle } from '../utils/smooth-slide.js';
 
 // --------------------------------------------------------------------------
 
+
 class Select {
   // setup ------------------------------------------------------------------
 
@@ -302,21 +303,29 @@ class Select {
   // set single option actions
   setOptionAction(select, relativeSel, option) {
     if (relativeSel.multiple) {
-      const relativeSelections = this.getData(relativeSel).elements;
-      const twinSelections = select.querySelectorAll(
-        this.getClass(this.classes.selected)
-      );
-
       option.classList.toggle(this.classes.selected);
+      const relativeSelections = this.getData(relativeSel).elements;
 
       relativeSelections.forEach(relativeSelection => {
         relativeSelection.removeAttribute('selected');
       });
+
+      const twinSelections = select.querySelectorAll(
+        this.getClass(this.classes.selected)
+      );
       twinSelections.forEach(twinSelection => {
         relativeSel
           .querySelector(`option[value="${twinSelection.dataset.optVal}"]`)
           .setAttribute('selected', 'selected');
       });
+      if (!option.classList.contains(this.classes.selected)) {
+        console.log(
+          relativeSel.querySelector(`option[value="${option.dataset.optVal}"]`)
+        );
+        relativeSel
+          .querySelector(`option[value="${option.dataset.optVal}"]`)
+          .removeAttribute('selected');
+      }
     } else {
       select
         .querySelectorAll('.select__option')
@@ -458,7 +467,7 @@ class Select {
 
     // init select search
     if (relativeSel.hasAttribute('data-sel-search')) {
-      return `<div class="${this.classes.title}"><span${attr} class="${this.classes.val}"><input autocomplete="off" type="search" placeholder="${titleVal}" data-placeholder="${titleVal}" class="${this.classes.inp}"></span></div>`;
+      return `<div class="${this.classes.title}"><span ${attr} class="${this.classes.val}"><input autocomplete="off" type="search" placeholder="${titleVal}" data-placeholder="${titleVal}" class="${this.classes.inp}"></span></div>`;
     } else {
       const customClass =
         this.getData(relativeSel).elements.length &&
@@ -469,9 +478,9 @@ class Select {
         attr ? attr : ''
       } class="${this.classes.val} ${
         attrClass ? attrClass : ''
-      }"><span class="${this.classes.content} ${
-        customClass ? customClass : ''
-      }">${titleVal}</span></span></button>`;
+      }"><span class="${
+        this.classes.content
+      }${customClass}">${titleVal}</span></span></button>`;
     }
   }
   // get options
